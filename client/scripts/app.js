@@ -20,7 +20,7 @@ var Movies = Backbone.Collection.extend({
     // add code here
     // whenever the camparator or like status changes, we re-sort the movies
     this.on('change:comparator change:like', function() {
-      this.sortByField(/*  what to put here */);
+      this.sortByField('#myForm.sort_by:checked');
     });
     // add namespace, why sortByField 
   },
@@ -33,6 +33,8 @@ var Movies = Backbone.Collection.extend({
     this.comparator = field;
     // sort (which automatically involves comparator)
     this.sort();
+    //this.view.render();
+    
   }
 
 });
@@ -92,7 +94,8 @@ var MoviesView = Backbone.View.extend({
 
   initialize: function() {
     // add code here
-    this.collection.on('change', this.render, this);
+    // when collect is sorted, calls MoviesView.render on MoviesView
+    this.collection.on('sort', this.render, this);
   },
 
   render: function() {
