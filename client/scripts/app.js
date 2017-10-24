@@ -5,7 +5,9 @@ var Movie = Backbone.Model.extend({
   },
 
   toggleLike: function() {
-    // your code here
+    var status = this.get('like');
+    this.set('like', !status);
+    return this.get('like');
   }
 
 });
@@ -15,13 +17,22 @@ var Movies = Backbone.Collection.extend({
   model: Movie,
 
   initialize: function() {
-    // your code here
+    // add code here
+    // whenever the camparator or like status changes, we re-sort the movies
+    this.on('change:comparator change:like', function() {
+      this.sortByField(/*  what to put here */);
+    });
+    // add namespace, why sortByField 
   },
 
   comparator: 'title',
 
   sortByField: function(field) {
-    // your code here
+    // debugger;
+    // change comparator
+    this.comparator = field;
+    // sort (which automatically involves comparator)
+    this.sort();
   }
 
 });
@@ -58,7 +69,7 @@ var MovieView = Backbone.View.extend({
                         </div>'),
 
   initialize: function() {
-    // your code here
+    this.model.on('change', this.render, this);
   },
 
   events: {
@@ -67,6 +78,7 @@ var MovieView = Backbone.View.extend({
 
   handleClick: function() {
     // your code here
+    this.model.toggleLike(); 
   },
 
   render: function() {
@@ -79,7 +91,8 @@ var MovieView = Backbone.View.extend({
 var MoviesView = Backbone.View.extend({
 
   initialize: function() {
-    // your code here
+    // add code here
+    this.collection.on('change', this.render, this);
   },
 
   render: function() {
